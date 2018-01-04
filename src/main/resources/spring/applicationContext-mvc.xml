@@ -45,7 +45,7 @@
         <property name="connectionTimeoutInMs" value="30000"/>
     </bean>
     <!--mybatis拦截器-->
-    <bean id="sqlStatementInterceptor" class=""></bean>
+    <bean id="sqlStatementInterceptor" class="com.qidi.grad.interceptor.SqlStatementInterceptor"></bean>
 
     <!--因为web.xml中defaultDispatcherServlet对所有请求进行了拦截，所以对一些.css .jpg .html .jsp也进行了拦截，所以此配置项
     保证对对静态资源不拦截-->
