@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/mvc
+       http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+    <!--mvc的自动扫描-->
+    <context:component-scan base-package="com.qidi.grad"></context:component-scan>
+    <!-- 引入配置文件 -->
+    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath*:props/*.properties</value>
+            </list>
+        </property>
+    </bean>
+    <!--数据源BoneCP连接池 -->
+    <bean id="dataSource" class="com.jolbox.bonecp.BoneCPDataSource" destroy-method="close" lazy-init="false">
+        <property name="driverClass" value="${db.driver}"/>
+        <property name="jdbcUrl" value="${db.url}"/>
+        <property name="username" value="${db.username}"/>
+        <property name="password" value="${db.password}"/>
+        <!--检查数据库连接池中空闲连接的间隔时间，单位是分，默认值：240，如果要取消则设置为0-->
+        <property name="idleConnectionTestPeriodInMinutes" value="${idleConnectionTestPeriodInMinutes}"/>
+        <!--连接池中未使用的链接最大存活时间，单位是分，默认值：60，如果要永远存活设置为0-->
+        <property name="idleMaxAgeInMinutes" value="${idleMaxAgeInMinutes}"/>
+        <!--每个分区最大的连接数 -->
+        <property name="maxConnectionsPerPartition" value="${maxConnectionsPerPartition}"/>
+        <!--每个分区最小的连接数 -->
+        <property name="minConnectionsPerPartition" value="${minConnectionsPerPartition}"/>
+        <!--分区数，默认值2，最小1，推荐3-4，视应用而定  -->
+        <property name="partitionCount" value="${partitionCount}"/>
+        <!-- 当连接池中的连接耗尽的时候一次同时获取的连接数。Default: 1 -->
+        <property name="acquireIncrement" value="${acquireIncrement}"/>
+        <!--缓存prepared statements的大小，默认值：0 -->
+        <property name="statementsCacheSize" value="${statementsCacheSize}"/>
+        <!--每个分区释放链接助理进程的数量，默认值：3 -->
+        <property name="defaultAutoCommit" value="true"/>
+        <!--链接超时，默认值：Long.MAX_VALUE;单位：毫秒 -->
+        <property name="connectionTimeoutInMs" value="30000"/>
+    </bean>
+    <!--mybatis拦截器-->
+    <bean id="sqlStatementInterceptor" class=""></bean>
+
+    <!--因为web.xml中defaultDispatcherServlet对所有请求进行了拦截，所以对一些.css .jpg .html .jsp也进行了拦截，所以此配置项
+    保证对对静态资源不拦截-->
+    <mvc:default-servlet-handler/>
+    <!--视图解析器-->
+    <bean id="viewResolver"
+          class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/views/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+    <!--配置文件上上传-->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="defaultEncoding" value="utf-8"/>
+        <property name="maxUploadSize" value="10485760000"/>
+        <property name="maxInMemorySize" value="40960"/>
+    </bean>
+</beans>

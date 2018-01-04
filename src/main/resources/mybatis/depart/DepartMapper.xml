@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qidi.grad.dao.DepartDao">
+
+    <resultMap id="departResultMap" type="Depart">
+        <id property="id" column="id"/>
+        <result property="apartName" column="apart_name"/>
+        <result property="address" column="address"/>
+    </resultMap>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="Depart">
+        insert into depart
+        <trim prefix="(" suffixOverrides="," suffix=")">
+            <if test="id != null">id,</if>
+            <if test="apartName != null">apart_name,</if>
+            <if test="address != null">address,</if>
+        </trim>
+        values
+        <trim prefix="(" suffixOverrides="," suffix=")">
+            <if test="id != null">#{id},</if>
+            <if test="apartName != null">#{apartName},</if>
+            <if test="address != null">#{address},</if>
+        </trim>
+    </insert>
+
+    <update id="update" parameterType="Depart">
+        update depart
+        <set>
+            <if test="apartName != null">apart_name=#{apartName},</if>
+            <if test="address != null">address=#{address}</if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <select id="getDepartById" parameterType="int" resultMap="departResultMap">
+        select * from depart
+        where ID=#{id}
+    </select>
+
+    <select id="countDepart" parameterType="map" resultType="int">
+        select count(*) from depart
+        <include refid="queryCondition"/>
+    </select>
+
+    <select id="getDepartList" parameterType="map" resultMap="departResultMap">
+        select * from depart
+        <include refid="queryCondition"/>
+        <if test="start != null and limit != null">
+            limit #{start},#{limit}
+        </if>
+    </select>
+
+    <sql id="queryCondition">
+        <where>
+            <if test="id != null">id=#{id}</if>
+            <if test="apartName != null">and apart_name=#{apartName}</if>
+            <if test="address != null">and address=#{address}</if>
+        </where>
+    </sql>
+
+</mapper>
