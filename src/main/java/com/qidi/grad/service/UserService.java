@@ -1,6 +1,6 @@
 package com.qidi.grad.service;
 
-import com.qidi.grad.dao.UserDao;
+import com.qidi.grad.dao.user.UserDao;
 import com.qidi.grad.entry.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

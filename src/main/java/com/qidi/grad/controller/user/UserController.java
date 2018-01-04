@@ -1,4 +1,4 @@
-package com.qidi.grad.controller;
+package com.qidi.grad.controller.user;
 
 import com.qidi.grad.entry.User;
 import com.qidi.grad.service.UserService;
@@ -29,4 +29,5 @@ public class UserController {
         List<User> list = userService.listUser(params);
         return list;
     }
+
 }

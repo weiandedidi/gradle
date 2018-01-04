@@ -3,12 +3,15 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:mybatis="http://mybatis.org/schema/mybatis-spring"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans.xsd
        http://www.springframework.org/schema/context
        http://www.springframework.org/schema/context/spring-context.xsd
        http://www.springframework.org/schema/mvc
-       http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+       http://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
     <!--mvc的自动扫描-->
     <context:component-scan base-package="com.qidi.grad"></context:component-scan>
     <!-- 引入配置文件 -->
@@ -46,6 +49,55 @@
     </bean>
     <!--mybatis拦截器-->
     <bean id="sqlStatementInterceptor" class="com.qidi.grad.interceptor.SqlStatementInterceptor"></bean>
+    <!--mybatis配置-->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean" lazy-init="false">
+        <property name="dataSource" ref="dataSource"/>
+        <!-- mybatis配置文件 -->
+        <property name="configLocation" value="classpath:mybatis/mybatis-config.xml"/>
+        <!-- 自动扫描entity目录, 省掉mybatis-config.xml里的手工配置 -->
+        <property name="typeAliasesPackage" value="com.lsh.wms.model"/>
+        <!-- 显式指定Mapper文件位置 -->
+        <property name="mapperLocations" value="classpath:mybatis/**/*Mapper.xml"/>
+        <property name="plugins">
+            <array>
+                <ref bean="sqlStatementInterceptor"/>
+            </array>
+        </property>
+    </bean>
+    <!--数据库事物-->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+    <!-- 使用annotation定义事务，注解定义事物 @Transactional(readOnly = false) -->
+    <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"/>
+
+    <!-- 事务管理 通知 可以方法中使用注解灵活配置，@Transactional(readOnly = false) -->
+    <!-- 事务 aop 配置两个配套使用 -->
+<!--    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            &lt;!&ndash; 对insert,update,delete 开头的方法进行事务管理,只要有异常就回滚 &ndash;&gt;
+            <tx:method name="insert*" propagation="REQUIRED" rollback-for="java.lang.Throwable"/>
+            <tx:method name="update*" propagation="REQUIRED" rollback-for="java.lang.Throwable"/>
+            <tx:method name="delete*" propagation="REQUIRED" rollback-for="java.lang.Throwable"/>
+            &lt;!&ndash; select,count开头的方法,开启只读,提高数据库访问性能 &ndash;&gt;
+            <tx:method name="select*" read-only="true"/>
+            <tx:method name="count*" read-only="true"/>
+            &lt;!&ndash; 对其他方法 使用默认的事务管理 &ndash;&gt;
+            <tx:method name="*"/>
+        </tx:attributes>
+    </tx:advice>
+
+    <aop:config>
+        <aop:pointcut id="serviceMethods" expression="execution(* com.eliteams.quick4j.web.service..*(..))"/>
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="serviceMethods"/>
+    </aop:config>
+    -->
+
+    <!-- 定义aspectj 可加快扫描-->
+    <aop:aspectj-autoproxy proxy-target-class="true"/>
+    <mybatis:scan base-package="com.sohu.wms.dao" factory-ref="sqlSessionFactory"
+                  annotation="com.qidi.grad.dao.MyBatisRepository"/>
+
 
     <!--因为web.xml中defaultDispatcherServlet对所有请求进行了拦截，所以对一些.css .jpg .html .jsp也进行了拦截，所以此配置项
     保证对对静态资源不拦截-->

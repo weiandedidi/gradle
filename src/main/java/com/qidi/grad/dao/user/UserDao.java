@@ -1,5 +1,6 @@
-package com.qidi.grad.dao;
+package com.qidi.grad.dao.user;
 
+import com.qidi.grad.dao.MyBatisRepository;
 import com.qidi.grad.entry.User;
 
 import java.util.List;

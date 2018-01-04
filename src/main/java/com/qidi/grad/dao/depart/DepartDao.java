@@ -1,6 +1,7 @@
-package com.qidi.grad.dao;
+package com.qidi.grad.dao.depart;
 
 
+import com.qidi.grad.dao.MyBatisRepository;
 import com.qidi.grad.entry.Depart;
 
 import java.util.List;
