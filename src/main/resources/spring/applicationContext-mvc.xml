@@ -11,7 +11,13 @@
        http://www.springframework.org/schema/context
        http://www.springframework.org/schema/context/spring-context.xsd
        http://www.springframework.org/schema/mvc
-       http://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+       http://www.springframework.org/schema/mvc/spring-mvc.xsd
+       http://www.springframework.org/schema/tx
+       http://www.springframework.org/schema/tx/spring-tx.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop.xsd
+       http://mybatis.org/schema/mybatis-spring
+       http://mybatis.org/schema/mybatis-spring.xsd">
     <!--mvc的自动扫描-->
     <context:component-scan base-package="com.qidi.grad"></context:component-scan>
     <!-- 引入配置文件 -->
@@ -73,29 +79,30 @@
 
     <!-- 事务管理 通知 可以方法中使用注解灵活配置，@Transactional(readOnly = false) -->
     <!-- 事务 aop 配置两个配套使用 -->
-<!--    <tx:advice id="txAdvice" transaction-manager="transactionManager">
-        <tx:attributes>
-            &lt;!&ndash; 对insert,update,delete 开头的方法进行事务管理,只要有异常就回滚 &ndash;&gt;
-            <tx:method name="insert*" propagation="REQUIRED" rollback-for="java.lang.Throwable"/>
-            <tx:method name="update*" propagation="REQUIRED" rollback-for="java.lang.Throwable"/>
-            <tx:method name="delete*" propagation="REQUIRED" rollback-for="java.lang.Throwable"/>
-            &lt;!&ndash; select,count开头的方法,开启只读,提高数据库访问性能 &ndash;&gt;
-            <tx:method name="select*" read-only="true"/>
-            <tx:method name="count*" read-only="true"/>
-            &lt;!&ndash; 对其他方法 使用默认的事务管理 &ndash;&gt;
-            <tx:method name="*"/>
-        </tx:attributes>
-    </tx:advice>
+    <!--    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+            <tx:attributes>
+                &lt;!&ndash; 对insert,update,delete 开头的方法进行事务管理,只要有异常就回滚 &ndash;&gt;
+                <tx:method name="insert*" propagation="REQUIRED" rollback-for="java.lang.Throwable"/>
+                <tx:method name="update*" propagation="REQUIRED" rollback-for="java.lang.Throwable"/>
+                <tx:method name="delete*" propagation="REQUIRED" rollback-for="java.lang.Throwable"/>
+                &lt;!&ndash; select,count开头的方法,开启只读,提高数据库访问性能 &ndash;&gt;
+                <tx:method name="select*" read-only="true"/>
+                <tx:method name="count*" read-only="true"/>
+                &lt;!&ndash; 对其他方法 使用默认的事务管理 &ndash;&gt;
+                <tx:method name="*"/>
+            </tx:attributes>
+        </tx:advice>
 
-    <aop:config>
-        <aop:pointcut id="serviceMethods" expression="execution(* com.eliteams.quick4j.web.service..*(..))"/>
-        <aop:advisor advice-ref="txAdvice" pointcut-ref="serviceMethods"/>
-    </aop:config>
-    -->
+        <aop:config>
+            <aop:pointcut id="serviceMethods" expression="execution(* com.eliteams.quick4j.web.service..*(..))"/>
+            <aop:advisor advice-ref="txAdvice" pointcut-ref="serviceMethods"/>
+        </aop:config>
+        -->
 
     <!-- 定义aspectj 可加快扫描-->
     <aop:aspectj-autoproxy proxy-target-class="true"/>
-    <mybatis:scan base-package="com.sohu.wms.dao" factory-ref="sqlSessionFactory"
+
+    <mybatis:scan base-package="com.qidi.grad.dao" factory-ref="sqlSessionFactory"
                   annotation="com.qidi.grad.dao.MyBatisRepository"/>
 
 
