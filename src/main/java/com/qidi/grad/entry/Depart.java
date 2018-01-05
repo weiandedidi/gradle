@@ -11,21 +11,17 @@ import java.io.Serializable;
  */
 public class Depart implements Serializable {
     /**
-     * id
+     * 部门id
      */
     private Long id;
     /**
-     * 名字
+     * 部门名字
      */
-    private String name;
+    private String apartName;
     /**
-     * 部门id
+     * 地址
      */
-    private Integer departid;
-    /**
-     * 年龄
-     */
-    private Integer age;
+    private String address;
 
     public Long getId() {
         return id;
@@ -35,27 +31,19 @@ public class Depart implements Serializable {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getApartName() {
+        return apartName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setApartName(String apartName) {
+        this.apartName = apartName;
     }
 
-    public Integer getDepartid() {
-        return departid;
+    public String getAddress() {
+        return address;
     }
 
-    public void setDepartid(Integer departid) {
-        this.departid = departid;
-    }
-
-    public Integer getAge() {
-        return age;
-    }
-
-    public void setAge(Integer age) {
-        this.age = age;
+    public void setAddress(String address) {
+        this.address = address;
     }
 }

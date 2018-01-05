@@ -2,14 +2,15 @@ package com.qidi.grad.interceptor;
 
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.mapping.ParameterMapping;
-import org.apache.ibatis.plugin.Interceptor;
-import org.apache.ibatis.plugin.Invocation;
-import org.apache.ibatis.plugin.Plugin;
+import org.apache.ibatis.plugin.*;
 import org.apache.ibatis.reflection.MetaObject;
 import org.apache.ibatis.session.Configuration;
+import org.apache.ibatis.session.ResultHandler;
+import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.type.TypeHandlerRegistry;
 import org.apache.log4j.Logger;
 import org.springframework.util.CollectionUtils;
@@ -28,6 +29,10 @@ import java.util.concurrent.Executors;
  * @date: 2018/1/4
  * Time: 10:44
  */
+@Intercepts({
+        @Signature(type = Executor.class, method = "update", args = {MappedStatement.class, Object.class}),
+        @Signature(type = Executor.class, method = "query", args = {MappedStatement.class, Object.class,
+                RowBounds.class, ResultHandler.class})})
 public class SqlStatementInterceptor implements Interceptor {
     private static final Logger logger = Logger.getLogger(SqlStatementInterceptor.class);
 

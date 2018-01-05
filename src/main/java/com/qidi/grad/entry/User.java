@@ -10,18 +10,23 @@ import java.io.Serializable;
  * Time: 16:38
  */
 public class User implements Serializable {
+
     /**
-     * 部门id
+     * id
      */
     private Long id;
     /**
-     * 部门名字
+     * 名字
      */
-    private String apartName;
+    private String name;
     /**
-     * 地址
+     * 部门id
      */
-    private String address;
+    private Integer departid;
+    /**
+     * 年龄
+     */
+    private Integer age;
 
     public Long getId() {
         return id;
@@ -31,19 +36,27 @@ public class User implements Serializable {
         this.id = id;
     }
 
-    public String getApartName() {
-        return apartName;
+    public String getName() {
+        return name;
     }
 
-    public void setApartName(String apartName) {
-        this.apartName = apartName;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getAddress() {
-        return address;
+    public Integer getDepartid() {
+        return departid;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setDepartid(Integer departid) {
+        this.departid = departid;
+    }
+
+    public Integer getAge() {
+        return age;
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
     }
 }
