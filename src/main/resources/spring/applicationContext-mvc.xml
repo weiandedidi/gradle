@@ -66,6 +66,31 @@
 
     <!--mvc的自动扫描-->
     <context:component-scan base-package="com.qidi.grad"></context:component-scan>
+
+    <!-- REST中根据URL后缀自动判定Content-Type及相应的View -->
+    <bean id="contentNegotiationManager" class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
+        <property name="mediaTypes">
+            <value>
+                json=application/json
+                xml=application/xml
+            </value>
+        </property>
+    </bean>
+    <!--mvc:annotation-driven注解驱动配置 判定请求的东西-->
+    <mvc:annotation-driven content-negotiation-manager="contentNegotiationManager">
+        <mvc:message-converters register-defaults="true">
+            <!-- 将StringHttpMessageConverter的默认编码设为UTF-8 -->
+            <bean class="org.springframework.http.converter.StringHttpMessageConverter">
+                <constructor-arg value="UTF-8"/>
+            </bean>
+            <!-- 将Jackson2HttpMessageConverter的默认格式化输出设为true -->
+            <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+                <property name="prettyPrint" value="true"/>
+            </bean>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
+
+
     <!--数据库事物-->
     <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
         <property name="dataSource" ref="dataSource"/>
@@ -117,5 +142,20 @@
         <property name="maxInMemorySize" value="40960"/>
     </bean>
 
+    <!--登录的拦截器-->
+    <mvc:interceptors>
+        <bean class="com.qidi.grad.interceptor.LoginInterceptor"/>
+    </mvc:interceptors>
+
+
+    <!-- 将Controller抛出的异常转到特定View, 保持SiteMesh的装饰效果 -->
+    <bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+        <property name="exceptionMappings">
+            <props>
+                <!--<prop key="org.apache.shiro.authz.UnauthorizedException">error/403</prop>-->
+                <prop key="java.lang.Throwable">error/500</prop>
+            </props>
+        </property>
+    </bean>
 
 </beans>
